@@ -15,7 +15,6 @@ async function bootstrap() {
     .setDescription('Dokumentasi API User Auth')
     .setVersion('1.0')
     .addBearerAuth()
-    .addServer('http://localhost:3000')
     .addServer('https://nest-auth-api.dnn.web.id')
     .build();
   
