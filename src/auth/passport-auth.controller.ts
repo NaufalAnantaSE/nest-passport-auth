@@ -4,6 +4,8 @@ import { LoginDto } from "./dto/login.dto";
 import { localStrategyGuard } from "./guards/passport-local.guard";
 import { JwtAuthGuard } from "./guards/passport-jwt.guard";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { LoginV2Docs, ProfileV2Docs, RegisterV2Docs } from "./docs/auth-v2-docs";
+
 
 
 @ApiBearerAuth()
@@ -14,6 +16,7 @@ export class PassportAuthController {
         private readonly authService: AuthService,
     ){}
 
+    @LoginV2Docs()
     @HttpCode(200)
     @Post('login')
     @UseGuards(localStrategyGuard)
@@ -21,12 +24,15 @@ export class PassportAuthController {
         return this.authService.login(loginDto);
     }
 
+    @RegisterV2Docs()
     @HttpCode(200)
     @Post('register')
     async register(@Body() registerDto: LoginDto) {
         return this.authService.register(registerDto);
     }
 
+    @ProfileV2Docs()
+    @HttpCode(200)
     @Get('profile')
     @UseGuards(JwtAuthGuard)
     async getProfile(@Request() req) {
