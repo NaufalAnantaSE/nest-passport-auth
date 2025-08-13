@@ -15,33 +15,22 @@ async function bootstrap() {
     .setDescription('Dokumentasi API User Auth')
     .setVersion('1.0')
     .addBearerAuth()
+    .addServer('http://localhost:3000')
     .addServer('https://nest-auth-api.dnn.web.id')
     .build();
   
   const document = SwaggerModule.createDocument(app, config);
   
   // Custom options for Swagger UI
-  const customOptions = {
-    explorer: true,
+  const customOptions = { 
     swaggerOptions: {
-      persistAuthorization: true,
-      displayRequestDuration: true,
-      docExpansion: 'none',
-      filter: true,
-      showExtensions: true,
-      syntaxHighlight: {
-        activate: true,
-        theme: 'agate'
-      }
+      urls: [{ url: '/api-json', name: 'API' }],
     },
     customJs: [
-      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.7.2/swagger-ui-bundle.js',
-      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.7.2/swagger-ui-standalone-preset.js'
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.21.0/swagger-ui-bundle.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.21.0/swagger-ui-standalone-preset.js',
     ],
-    customCssUrl: [
-      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.7.2/swagger-ui.min.css',
-      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.7.2/swagger-ui-standalone-preset.min.css'
-    ]
+    customCssUrl: 'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.21.0/swagger-ui.css',
   };
   
   SwaggerModule.setup('api-docs', app, document, customOptions);
