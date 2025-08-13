@@ -5,17 +5,10 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   
   // Enable CORS
-  app.enableCors({
-    origin: '*',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
-    credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  });
+  app.enableCors();
 
   const config = new DocumentBuilder()
     .setTitle('API Dokumentasi User Auth')
@@ -23,7 +16,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .addBearerAuth()
     .addServer('https://nest-auth-api.dnn.web.id', 'Production')
-    .addServer(`http://localhost:3000`, 'Development')
+    .addServer('http://localhost:3000', 'Development')
     .build();
   
   const document = SwaggerModule.createDocument(app, config);
@@ -53,6 +46,9 @@ async function bootstrap() {
   };
   
   SwaggerModule.setup('api-docs', app, document, customOptions);
+
+  // Serve static files
+  app.useStaticAssets(join(__dirname, '..', 'public'));
 
   await app.listen(process.env.PORT || 3000);
 }
