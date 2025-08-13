@@ -1,9 +1,8 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Get, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { AuthService } from './auth.service';
 
 import { RegisterDto } from './dto/register.dto';
-import { AuthGuard } from './guards/auth.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { LoginDocs, MeDocs, RegisterDocs } from './docs/auth-docs';
 
@@ -27,14 +26,5 @@ export class AuthController {
     @Post('register')
     async register(@Body() registerDto: RegisterDto) {
         return this.authService.register(registerDto);
-    }
-
-
-    @MeDocs()
-    @HttpCode(HttpStatus.OK)
-    @UseGuards(AuthGuard)
-    @Get('me')
-    async getProfile(@Request() req) {
-        return req.user
     }
 }

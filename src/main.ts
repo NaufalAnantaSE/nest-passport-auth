@@ -15,7 +15,8 @@ async function bootstrap() {
     .setDescription('Dokumentasi API User Auth')
     .setVersion('1.0')
     .addBearerAuth()
-    .addServer('https://nest-auth-api.dnn.web.id')
+    .addServer('https://nest-auth-api.dnn.web.id', 'Production')
+    .addServer(`http://localhost:${process.env.PORT || 3000}`, 'Development')
     .build();
   
   const document = SwaggerModule.createDocument(app, config);

@@ -1,5 +1,5 @@
-import { UserProfile } from './../users/schemas/user-profile.schema';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { User } from '../users/schemas/user.schema';
+import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { RegisterDto } from './dto/register.dto';
 import { UsersService } from '../users/users.service';
 import { LoginDto } from './dto/login.dto';
@@ -52,26 +52,20 @@ export class AuthService {
     }
 
 
-    async register(registerDto: RegisterDto): Promise<any> {
-        const hashedPassword = await bcrypt.hash(registerDto.password, 10);
-        const createdUser = await this.usersService.createUser({
-            email: registerDto.email,
-            passwordHash: hashedPassword,
-        });
+async register(registerDto: RegisterDto): Promise<Omit<User, 'passwordHash'>> {
+    // Hash password
+    const hashedPassword = await bcrypt.hash(registerDto.password, 10);
 
+    // Simpan user baru (validasi duplikat ditangani oleh UsersService)
+    const createdUser = await this.usersService.createUser({
+        email: registerDto.email,
+        passwordHash: hashedPassword,
+    });
 
-        const { passwordHash, ...result } = createdUser.toObject();
-        return result;
-    }
-
-    async getProfile(UserProfile: UserProfile, req: any): Promise<any> {
-        const user = await this.usersService.findUserById(UserProfile.userId.toString());
-        if (!user) {
-            throw new UnauthorizedException('Kredensial tidak valid');
-        }
-        return {
-            _id: user._id,
-            email: user.email,
-        };
+        // Ubah ke object biasa dan hilangkan passwordHash
+        const { passwordHash, ...safeUser } = createdUser.toObject();
+        return safeUser as Omit<User, 'passwordHash'>;
     }
 }
+
+

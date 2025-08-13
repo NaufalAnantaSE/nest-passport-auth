@@ -31,11 +31,5 @@ export class PassportAuthController {
         return this.authService.register(registerDto);
     }
 
-    @ProfileV2Docs()
-    @HttpCode(200)
-    @Get('profile')
-    @UseGuards(JwtAuthGuard)
-    async getProfile(@Request() req) {
-        return this.authService.getProfile(req.user, req);
-    }
+
 }
