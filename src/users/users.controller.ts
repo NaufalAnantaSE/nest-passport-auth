@@ -1,7 +1,7 @@
 import { UsersService } from './users.service';
 import { Controller, Get, HttpCode, UseGuards, Request } from '@nestjs/common';
-import { ProfileV2Docs } from 'src/auth/docs/auth-v2-docs';
-import { JwtAuthGuard } from 'src/auth/guards/passport-jwt.guard';
+import { ProfileV2Docs } from '../auth/docs/auth-v2-docs';
+import { JwtAuthGuard } from '../auth/guards/passport-jwt.guard';
 
 @Controller('users')
 export class UsersController {
