@@ -21,15 +21,17 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   
   // Custom options for Swagger UI
-  const customOptions = {
-    customSiteTitle: 'API Documentation',
+  const customOptions = { 
     swaggerOptions: {
-      persistAuthorization: true,
+      urls: [{ url: '/api-json', name: 'API' }],
     },
-    customCss: '.swagger-ui .topbar { display: none }',
-    customJs: '/swagger-custom.js'
+    customJs: [
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.21.0/swagger-ui-bundle.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.21.0/swagger-ui-standalone-preset.js',
+    ],
+    customCssUrl: 'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.21.0/swagger-ui.css',
   };
-
+  
   SwaggerModule.setup('api-docs', app, document, customOptions);
 
   // Serve static files
